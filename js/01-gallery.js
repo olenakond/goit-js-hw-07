@@ -23,13 +23,15 @@ galleryList.addEventListener("click", modalOpen);
 
 const instance = basicLightbox.create(`
 <img src="" width="800" height="600">
-`);
+`, {
+  onShow: (instance) => document.addEventListener("keydown", modalCloseWithEscape),
+  onClose: (instance) => document.removeEventListener("keydown", modalCloseWithEscape)
+});
 
 function modalOpen(event) {
   event.preventDefault();
-  document.addEventListener("keydown", modalCloseWithEscape);
 
-  if (event.target.tagName === "IMG") {
+  if (event.target.nodeName === "IMG") {
     const originalImgUrl = event.target.dataset.source;
     const instanceElement = instance.element().querySelector("img");
     instanceElement.src = originalImgUrl;
@@ -41,5 +43,4 @@ function modalCloseWithEscape(event) {
   if (event.code === "Escape") {
     instance.close();
   }
-  document.removeEventListener("keydown", modalCloseWithEscape);
 }
